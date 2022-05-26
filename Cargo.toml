@@ -1,0 +1,19 @@
+[package]
+name = "curio-websocket"
+version = "0.1.0"
+authors = ["Andrew Harris <andrewfromtn@protonmail.com>"]
+edition = "2018"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+tokio = { version="0.2.22", features = ["macros", "io-util", "sync", "tcp", "dns", "time"] }
+tokio-serde = { version = "0.6.1", features = ["json"] }
+tokio-util = { version="0.3.1", features = ["codec"] }
+serde = { version="1.0.115", features = ["derive"] }
+serde_json = { version = "1" }
+warp = "0.2"
+futures = { version = "0.3", default-features = false }
+uuid = { version = "0.4", features = ["serde", "v4"] }
+curio-lib = { version="0.1.3", path="../curio-lib" }
+getopt = "1.0.1"

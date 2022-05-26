@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<meta charset="utf-8" />
+<title>WebSocket Test</title>
+<script language="javascript" type="text/javascript">
+
+var wsUri = "wss://websocket.curiocity.io/wss/";
+var authUri = "https://websocket.curiocity.io/auth"
+var output;
+
+function init()
+{
+  output = document.getElementById("output");
+    fetch(authUri, {
+        method: "POST",
+        headers: {
+            'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1laWQiOiI2MSIsInVuaXF1ZV9uYW1lIjoiQW5kcmV3RnJvbVROIiwibmJmIjoxNTk5OTQ2MTYzLCJleHAiOjE2MDI1MzgxNjMsImlhdCI6MTU5OTk0NjE2M30.Pb1XNYfWVo7SMbtV8U_z7HO1Ood9cFHnUUPthwlGB1I'
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        console.log(data)
+        
+        var my_id = data.id;
+        testWebSocket(my_id);
+    });  
+}
+
+function testWebSocket(id)
+{
+  websocket = new WebSocket(wsUri + id);
+  websocket.onopen = function(evt) { onOpen(evt) };
+  websocket.onclose = function(evt) { onClose(evt) };
+  websocket.onmessage = function(evt) { onMessage(evt) };
+  websocket.onerror = function(evt) { onError(evt) };
+}
+
+function onOpen(evt)
+{
+  writeToScreen("CONNECTED");
+  doSend("WebSocket rocks");
+}
+
+function onClose(evt)
+{
+  writeToScreen("DISCONNECTED");
+}
+
+function onMessage(evt)
+{
+  writeToScreen('<span style="color: blue;">RESPONSE: ' + evt.data+'</span>');
+  websocket.close();
+}
+
+function onError(evt)
+{
+  writeToScreen('<span style="color: red;">ERROR:</span> ' + evt.data);
+}
+
+function doSend(message)
+{
+  writeToScreen("SENT: " + message);
+  websocket.send(message);
+}
+
+function writeToScreen(message)
+{
+  var pre = document.createElement("p");
+  pre.style.wordWrap = "break-word";
+  pre.innerHTML = message;
+  output.appendChild(pre);
+}
+
+window.addEventListener("load", init, false);
+
+</script>
+
+<h2>WebSocket Test</h2>
+
+<div id="output"></div>
